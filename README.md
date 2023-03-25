@@ -29,6 +29,7 @@ Arguments:
 * __fillet__ Radius of the fillets (corners). Between 4-20 (default: `4`)
 * __rib__ Rib thickness (width). Between 6-20 (default: `10`)
 * __clearance__ Gap clearance for joints. Between 0.1-0.4 (default: `0.3`)
+* __top__ Top or bottom box (default: `false`)
 
 ## Example
 

@@ -88,7 +88,7 @@ if (showExampleCombinedClosed) {
 }
 
 // main module
-module openBox(length, width, height, fillet=4, shell=3, rib=10, top=false, clearance=0.3) {
+module openBox(length, width, height, fillet=4, shell=3, rib=10, clearance=0.3, top=false) {
     union() {
         difference() {
             union() {
