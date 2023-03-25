@@ -25,6 +25,7 @@ Arguments:
 * __length__ Inside length of the box. Best between 50-220
 * __width__ Inside width of the box. Best between 50-220
 * __height__ Inside height of the box. Best between 50-220
+* __fill__ Inside fill height of the box. Between 0 and `height` (default: `0`)
 * __shell__ The thickness of the walls (side and bottom). Between 3-9 (default: `3`)
 * __fillet__ Radius of the fillets (corners). Between 4-20 (default: `4`)
 * __rib__ Rib thickness (width). Between 6-20 (default: `10`)
@@ -50,6 +51,5 @@ openBox(length=65, width=100, height=45, top=false);
 
 ## TODO
 
-1. Height of lip should not add to the internal height
-2. Minumum lid snap width
-3. Maximum lid snap width
+1. Minumum lid snap width
+2. Maximum lid snap width

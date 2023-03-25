@@ -32,6 +32,12 @@ insideLidHeight = 25; // [50:220]
 // Inside base height
 insideBaseHeight = 45; // [30:220]
 
+// Inside lid fill height
+insideLidFillHeight = 0; // [0:220]
+
+// Inside base fill height
+insideBaseFillHeight = 0; // [0:220]
+
 // Shell thickness
 shellThickness = 3; // [3:9]
 
@@ -44,6 +50,9 @@ ribThickness = 10; // [6:15]
 // Gap clearance for joints
 gapClearance = 0.3; // [0.1, 0.2, 0.3, 0.4]
 
+// Show example
+showExample = true;
+
 // Show a combined opened example
 showExampleCombinedOpen = false;
 
@@ -51,15 +60,17 @@ showExampleCombinedOpen = false;
 showExampleCombinedClosed = false;
 
 // EXAMPLE
-// bottom
-color([0.5, 0.5, 1])
-translate([0, 0, 0])
-openBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=false);
+if (showExample) {
+    // bottom
+    color([0.5, 0.5, 1])
+    translate([0, 0, 0])
+    openBox(length=insideLength, width=insideWidth, height=insideBaseHeight, fill=insideBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=false);
 
-// top
-color([1, 0.5, 1])
-translate([0, (insideWidth+(filletRadius*4)+(shellThickness*4)), 0])
-openBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);
+    // top
+    color([1, 0.5, 1])
+    translate([0, (insideWidth+(filletRadius*4)+(shellThickness*4)), 0])
+    openBox(length=insideLength, width=insideWidth, height=insideLidHeight, fill=insideLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);
+}
 
 if (showExampleCombinedOpen) {
     // bottom
@@ -88,7 +99,7 @@ if (showExampleCombinedClosed) {
 }
 
 // main module
-module openBox(length, width, height, fillet=4, shell=3, rib=10, clearance=0.3, top=false) {
+module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearance=0.3, top=false) {
     union() {
         difference() {
             union() {
@@ -96,12 +107,12 @@ module openBox(length, width, height, fillet=4, shell=3, rib=10, clearance=0.3, 
                 union() {
                     // lower
                     minkowski() {
-                        cube([length, width, (height+shell)]);
+                        cube([length, width, (height-(shell*2))]);
                         cylinder(r1=fillet, r2=(fillet+shell), h=shell, center=false);
                     }
 
                     // lip
-                    translate([0, 0, (height+(shell*2))])
+                    translate([0, 0, (height-shell)])
                     minkowski() {
                         cube([length, width, shell]);
                         cylinder(r1=(fillet+shell), r2=(fillet+(shell*2)), h=shell, center=false);
@@ -127,7 +138,7 @@ module openBox(length, width, height, fillet=4, shell=3, rib=10, clearance=0.3, 
             // Inside cut out
             translate([-(length/2), -(width/2), ((shell/2)+shell)])
             minkowski() {
-              cube([length, width, (height+(shell*2)+0.1)]);
+              cube([length, width, (height-shell+0.1)]);
               cylinder(r=fillet, h=shell, center=true);
             }
 
@@ -138,18 +149,18 @@ module openBox(length, width, height, fillet=4, shell=3, rib=10, clearance=0.3, 
 
             // Bottom hinge cutout
             if (top==false) {
-                translate([(-(length/2)-(shell*3)), 0, (height+(shell*4))])
+                translate([(-(length/2)-(shell*3)), 0, (height+shell)])
                 rotate([90, 90, 0])
                 cylinder(d=((shell*2)+(clearance*2)), h=(width+(fillet*2)+rib-(shell*8)+(clearance*2)), center=true);
             }
 
             // Top hinge cutout
             if (top==true) {
-                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+(shell*4))])
+                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
                 rotate([90, 90, 0])
                 cylinder(d=((shell*2)+(clearance*2)), h=(width+(fillet*2)-rib-(shell*8)+(clearance*2)), center=true);
 
-                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+(shell*4))])
+                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
                 rotate([90, 90, 0])
                 cylinder(d=(shell+(clearance*2)), h=(width+(fillet*2)-(shell*6)), center=true);
             }
@@ -157,26 +168,26 @@ module openBox(length, width, height, fillet=4, shell=3, rib=10, clearance=0.3, 
 
         // Bottom hinge
         if (top==false) {
-            translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+(shell*4))])
+            translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
             rotate([90, 90, 0])
             cylinder(d=(shell*2), h=(width+(fillet*2)-rib-(shell*8)), center=true);
 
-            translate([(-(length/2)-(shell*3)-(shell/2)), -(width+(fillet*2)-rib-(shell*8.2))/2, (height+(shell*4))])
+            translate([(-(length/2)-(shell*3)-(shell/2)), -(width+(fillet*2)-rib-(shell*8.2))/2, (height+shell)])
             sphere(d=shell);
 
-            translate([(-(length/2)-(shell*3)-(shell/2)), (width+(fillet*2)-rib-(shell*8.2))/2, (height+(shell*4))])
+            translate([(-(length/2)-(shell*3)-(shell/2)), (width+(fillet*2)-rib-(shell*8.2))/2, (height+shell)])
             sphere(d=shell);
 
-            difference(){
+            difference() {
                 union() {
-                    translate([(-(length/2)-(shell*3)-(shell/2)-(shell*0.1)), 0, (height+(shell*4)-(shell*2.5))])
+                    translate([(-(length/2)-(shell*3)-(shell/2)-(shell*0.1)), 0, (height+shell-(shell*2.5))])
                     cube([(shell*1.8), (width+(fillet*2)-rib-(shell*8)), (shell*5)], center=true);
 
-                    translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+(shell*4)-(shell*3))])
+                    translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell-(shell*3))])
                     cube([(shell*2), (width+(fillet*2)-rib-(shell*8)), (shell*4)], center=true);
                 }
 
-                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height-shell)])
+                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height-(shell*4))])
                 rotate([0, -45, 0])
                 cube([(shell*2), width, (shell*10)], center=true);
             }
@@ -193,38 +204,49 @@ module openBox(length, width, height, fillet=4, shell=3, rib=10, clearance=0.3, 
         if (top==true) {
             difference() {
                 union() {
-                    translate([((length/2)+shell+fillet+(shell*1.5)), 0, (height+(shell*4))])
+                    translate([((length/2)+shell+fillet+(shell*1.5)), 0, (height+shell)])
                     cube([shell, (width+(fillet*2)-rib-(shell*8)-clearance), (shell*6)], center=true);
 
-                    translate([((length/2)+shell+fillet+(shell*0.5)), 0, (height+shell)])
+                    translate([((length/2)+shell+fillet+(shell*0.5)), 0, (height-shell)])
                     cube([shell, (width+(fillet*2)-rib-(shell*8)), (shell*4)], center=true);
 
-                    translate([((length/2)+shell+fillet+(shell*1.1)), 0, (height+(shell*4)+(shell*1.5)+(clearance*2))])
+                    translate([((length/2)+shell+fillet+(shell*1.1)), 0, (height+shell+(shell*1.5)+(clearance*2))])
                     rotate([90, 90, 0])
                     cylinder(d=shell, h=(width+(fillet*2)-rib-(shell*8)), center=true);
                 }
 
-                translate([((length/2)+(shell*2)), 0, (height-shell)])
+                translate([((length/2)+(shell*2)), 0, (height-(shell*4))])
                 rotate([0, 45, 0])
                 cube([(shell*2), width, (shell*10)], center=true);
 
-                translate([((length/2)+(shell*2)), ((width-(fillet*2)-rib-(shell*8)+rib)/2), (height+(shell*8))])
+                translate([((length/2)+(shell*2)), ((width-(fillet*2)-rib-(shell*8)+rib)/2), (height+(shell*5))])
                 rotate([45, 0, 0])
                 cube([(shell*10), (shell*3), (shell*10)], center=true);
 
-                translate([((length/2)+(shell*2)), -((width-(fillet*2)-rib-(shell*8)+rib)/2), (height+(shell*8))])
+                translate([((length/2)+(shell*2)), -((width-(fillet*2)-rib-(shell*8)+rib)/2), (height+(shell*5))])
                 rotate([-45, 0, 0])
                 cube([(shell*10), (shell*3), (shell*10)], center=true);
 
-                translate([((length/2)+(shell*2)+shell+(shell/2)), 0, (height+(shell*8.8))])
+                translate([((length/2)+(shell*2)+shell+(shell/2)), 0, (height+(shell*5.8))])
                 rotate([0, 45, 0])
                 cube([(shell*3), width, (shell*10)], center=true);
             }
         }
 
         // Inside fill
-        // translate([-(length/2), -(width/2), 0])
-        // cube([length, width, height]);
+        fillHeight = (fill > height) ? height : fill;
+        if (fillHeight > 0) {
+            // Internal box
+            minkowski() {
+                translate([-(length/2), -(width/2), ((shell*2)-(shell/2))])
+                cube([length, width, fillHeight-shell]);
+                cylinder(d=(fillet*2), h=shell, center=true);
+            }
+
+            // Internal box filler
+            translate([-(length/2), -(width/2), shell])
+            cube([length, width, fillHeight]);
+        }
     }
 }
 
@@ -232,29 +254,30 @@ module openBox(length, width, height, fillet=4, shell=3, rib=10, clearance=0.3, 
 module topHingeSide(length, width, height, fillet, shell, clearance,rib) {
     difference() {
         union() {
-            translate([(-(length/2)-(shell*3)-(shell/2)), ((width/2)-(fillet/2)-(shell*2)+(clearance*0.5)), (height+(shell*4))])
+            translate([(-(length/2)-(shell*3)-(shell/2)), ((width/2)-(fillet/2)-(shell*2)+(clearance*0.5)), (height+shell)])
             rotate([90, 90, 0])
             cylinder(d=2*shell, h=rib-clearance, center=true);
 
-            translate([(-(length/2)-(shell*3)-(shell/2)), ((width/2)-(fillet/2)-(shell*2)+(clearance*0.5)), (height+(shell*2))])
-            cube([2*shell,rib-clearance,4*shell], center=true);
+            translate([(-(length/2)-(shell*3)-(shell/2)), ((width/2)-(fillet/2)-(shell*2)+(clearance*0.5)), (height-shell)])
+            cube([(shell*2), rib-clearance, (shell*4)], center=true);
         }
 
-        translate([(-(length/2)-(shell*3)-(shell/2)), (width-fillet+(shell*4)-rib-(shell*8))/2, (height+(shell*4))])
+        translate([(-(length/2)-(shell*3)-(shell/2)), (width-fillet+(shell*4)-rib-(shell*8))/2, (height+shell)])
         sphere(d=shell);
 
-        translate([(-(length/2)-(shell*3)-(shell/2)), (width-fillet+(shell*4)-rib-(shell*8.3)+clearance)/2, (height+(shell*4))])
-        rotate([0,-90,0])cylinder(h=shell+0.1, d=shell);
+        translate([(-(length/2)-(shell*3)-(shell/2)), (width-fillet+(shell*4)-rib-(shell*8.3)+clearance)/2, (height+shell)])
+        rotate([0,-90,0])
+        cylinder(h=(shell+0.1), d=shell);
 
-        translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height-shell)])
+        translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height-(shell*3))])
         rotate([0,-45,0])
-        cube([2*shell,width,10*shell], center=true);
+        cube([2*shell, width, (shell*10)], center=true);
     }
 }
 
 // Bottom rabbet
 module bottomRabbet(length, width, height, fillet, shell) {
-    translate([-(length/2), -(width/2), (height+(shell*4)-1)])
+    translate([-(length/2), -(width/2), (height+shell-1)])
     difference() {
         minkowski() {
             cube([length, width, ((shell/3)*2)]);
@@ -275,7 +298,7 @@ module bottomRabbet(length, width, height, fillet, shell) {
 
 // Top rabbet
 module topRabbet(length, width, height, fillet, shell) {
-    translate([-(length/2), -(width/2), (height+(shell*4)+0.001)])
+    translate([-(length/2), -(width/2), (height+shell+0.001)])
     difference() {
         minkowski() {
             cube([length, width, 0.001]);
@@ -295,7 +318,7 @@ module oneRibY(length, width, height, fillet, shell, rib) {
     intersection() {
         translate([-(length/2), -(width/2), 0])
         minkowski() {
-          cube([length, width, (height+(shell*2))]);
+          cube([length, width, (height-shell)]);
           cylinder(r1=(fillet+shell), r2=(fillet+(shell*2)), h=shell);
         }
 
@@ -309,8 +332,8 @@ module oneRibX(length, width, height, fillet, shell, rib) {
     intersection() {
         translate([-(length/2), -(width/2), 0])
         minkowski() {
-        cube([length, width, (height+(shell*2))]);
-          cylinder(r1=(fillet+shell), r2=(fillet+(shell*2)), h=shell);
+            cube([length, width, (height-shell)]);
+            cylinder(r1=(fillet+shell), r2=(fillet+(shell*2)), h=shell);
         }
 
         translate([0, ((width/2)-(fillet*2)), (fillet*2)+1])
