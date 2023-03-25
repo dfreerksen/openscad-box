@@ -17,8 +17,12 @@ Parameters
     top       > Is this the top of the box
 */
 
+/* [System] */
+
 // Number of fragments to draw an arc
 $fn = 64;
+
+/* [Box Properties] */
 
 // Inside length of the box
 insideLength = 65; // [50:220]
@@ -50,17 +54,19 @@ ribThickness = 10; // [6:15]
 // Gap clearance for joints
 gapClearance = 0.3; // [0.1, 0.2, 0.3, 0.4]
 
+/* [Display] */
+
 // Show example
-showExample = true;
+showBoxExample = true;
 
 // Show a combined opened example
-showExampleCombinedOpen = false;
+showBoxExampleCombinedOpen = false;
 
 // Show a combined closed example
-showExampleCombinedClosed = false;
+showBoxExampleCombinedClosed = false;
 
 // EXAMPLE
-if (showExample) {
+if (showBoxExample) {
     // bottom
     color([0.5, 0.5, 1])
     translate([0, 0, 0])
@@ -72,7 +78,7 @@ if (showExample) {
     openBox(length=insideLength, width=insideWidth, height=insideLidHeight, fill=insideLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);
 }
 
-if (showExampleCombinedOpen) {
+if (showBoxExampleCombinedOpen) {
     // bottom
     color([1, 0.5, 0.5])
     translate([0, (-insideWidth-(filletRadius*4)-(shellThickness*4)), 0])
@@ -85,7 +91,7 @@ if (showExampleCombinedOpen) {
     openBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);
 }
 
-if (showExampleCombinedClosed) {
+if (showBoxExampleCombinedClosed) {
     // bottom
     color([0.5, 1, 1])
     translate([(insideWidth+(filletRadius*4)-(shellThickness*4)), 0, 0])
