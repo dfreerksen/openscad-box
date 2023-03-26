@@ -3,35 +3,31 @@ Author: David Freerksen, dfreerksen@gmail.com
 Date: 03/25/2023
 */
 
+// Include box
 include <openscad-box.scad>
-
-/* [System] */
-
-// Number of fragments to draw an arc
-$fn = 64;
 
 /* [Bullet Properties] */
 
 // Number of holes
-bulletCount = 30; // [5:5:100]
+bulletCount = 20; // [5:100]
 
 // Number of holes in each column
-bulletColumns = 5; // [2:10]
+bulletColumns = 4; // [2:12]
 
-// Diameter of case (base diameter, not rim diameter)
-bulletDiameter = 9.58; // [5:5:100]
+// Diameter of bullet (base diameter, not rim diameter). Get this from Wikipedia
+bulletDiameter = 9.93;
 
-// Bullet length
-bulletHeight = 57.40; // [0.01:0.3]
+// Bullet overall length. Get this from Wikipedia
+bulletHeight = 29.69;
+
+// Bullet case length. Get this from Wikipedia
+bulletCaseHeight = 19.15;
 
 // Additional clearance for bullet diameter. The smaller the number, the tighter the fit
-bulletClearance = 0.05; // [0.01:0.01:0.3]
-
-// Height of case to be sticking out from hole
-bulletHeightExtended = 12 ; // [2:20]
+bulletClearance = 0.05; // [0.01:0.01:0.05]
 
 // Gap between holes
-bulletGap = 2; // [1:5]
+bulletGap = 1.6;
 
 /* [Box Properties] */
 
@@ -49,7 +45,10 @@ gapClearance = 0.3; // [0.1, 0.2, 0.3, 0.4]
 
 module __Customizer_Limit__ () {}
 
-// Box example overrides
+// Number of fragments to draw an arc
+$fn = 64;
+
+// Box overrides
 showBoxExample = false;
 showBoxExampleCombinedOpen = false;
 showBoxExampleCombinedClosed = false;
@@ -59,18 +58,18 @@ columnCount = floor(bulletCount/bulletColumns);
 rowCount = floor(bulletCount/columnCount);
 internalLength = (rowCount*bulletDiameter)+((rowCount-1)*bulletGap);
 internalWidth = (columnCount*bulletDiameter)+((columnCount-1)*bulletGap);
-internalLidHeight = bulletHeightExtended;
-internalBaseHeightCalculated = (bulletHeight + gapClearance - bulletHeightExtended);
-internalBaseHeight = (bulletHeightExtended > internalBaseHeightCalculated) ? bulletHeightExtended : internalBaseHeightCalculated;
+internalLidHeight = (bulletHeight-bulletCaseHeight);
+internalBaseHeightCalculated = (bulletHeight+gapClearance-internalLidHeight);
+internalBaseHeight = (internalLidHeight > internalBaseHeightCalculated) ? internalLidHeight : internalBaseHeightCalculated;
 
 // Hole calculations
 holeDiameter = (bulletDiameter+bulletClearance);
-holeHeight = (bulletHeight + gapClearance - bulletHeightExtended);
+holeHeight = (bulletHeight+gapClearance-internalLidHeight);
 
 // Box calculations
 internalLidFillHeight = 0;
 internalBaseFillHeightCalculated = holeHeight;
-internalBaseFillHeight = (bulletHeightExtended > internalBaseFillHeightCalculated) ? bulletHeightExtended : internalBaseFillHeightCalculated;
+internalBaseFillHeight = (internalLidHeight > internalBaseFillHeightCalculated) ? internalLidHeight : internalBaseFillHeightCalculated;
 
 // EXAMPLE
 // bottom
@@ -88,8 +87,7 @@ difference() {
                 for (r = [1:rowCount])
                 {
                     let (rowPosition = ((-internalLength/2)-holeDiameter+(holeDiameter/2)+(holeDiameter*r)-bulletGap+(bulletGap*r))) {
-                        // translate([rowPosition, columnPosition, (holeHeight+shellThickness+bulletClearance+1)])
-                        translate([rowPosition, columnPosition, (internalBaseHeight-holeHeight+(holeHeight/2))])
+                        translate([rowPosition, columnPosition, shellThickness+0.01])
                         cylinder(d=holeDiameter, h=holeHeight, center=false);
                     }
                 }
