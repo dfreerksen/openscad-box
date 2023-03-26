@@ -17,11 +17,6 @@ Parameters
     top       > Is this the top of the box
 */
 
-/* [System] */
-
-// Number of fragments to draw an arc
-$fn = 64;
-
 /* [Box Properties] */
 
 // Inside length of the box
@@ -103,6 +98,11 @@ if (showBoxExampleCombinedClosed) {
     rotate([0, 180, 180])
     openBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);
 }
+
+module __Customizer_Limit__ () {}
+
+// Number of fragments to draw an arc
+$fn = 64;
 
 // main module
 module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearance=0.3, top=false) {
@@ -193,9 +193,9 @@ module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearan
                     cube([(shell*2), (width+(fillet*2)-rib-(shell*8)), (shell*4)], center=true);
                 }
 
-                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height-(shell*4.3))])
+                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height-(shell*4.6))])
                 rotate([0, -45, 0])
-                cube([(shell*4), width, (shell*10)], center=true);
+                cube([(shell*2), width, (shell*10)], center=true);
             }
         }
 
