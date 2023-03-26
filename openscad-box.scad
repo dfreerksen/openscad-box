@@ -189,13 +189,13 @@ module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearan
                     translate([(-(length/2)-(shell*3)-(shell/2)-(shell*0.1)), 0, (height+shell-(shell*2.5))])
                     cube([(shell*1.8), (width+(fillet*2)-rib-(shell*8)), (shell*5)], center=true);
 
-                    translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell-(shell*3))])
+                    translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell-(shell*4))])
                     cube([(shell*2), (width+(fillet*2)-rib-(shell*8)), (shell*4)], center=true);
                 }
 
-                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height-(shell*4))])
+                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height-(shell*4.3))])
                 rotate([0, -45, 0])
-                cube([(shell*2), width, (shell*10)], center=true);
+                cube([(shell*4), width, (shell*10)], center=true);
             }
         }
 
