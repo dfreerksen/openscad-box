@@ -53,3 +53,8 @@ openBox(length=65, width=100, height=45, top=false);
 
 1. Minumum lid snap width
 2. Maximum lid snap width
+3. Customizable text
+  a. Lid, top, bottom right
+  b. Base, front, bottom right
+  c. Base, bottom, top left
+  d. Base, bottom, bottom right
