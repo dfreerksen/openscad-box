@@ -4,7 +4,7 @@ Date: 03/25/2023
 */
 
 // Include box
-include <openscad-box.scad>
+use <openscad-box.scad>
 
 /* [Bullet Properties] */
 
@@ -47,11 +47,6 @@ module __Customizer_Limit__ () {}
 
 // Number of fragments to draw an arc
 $fn = 64;
-
-// Box overrides
-showBoxExample = false;
-showBoxExampleCombinedOpen = false;
-showBoxExampleCombinedClosed = false;
 
 // Bullet calculations
 columnCount = floor(bulletCount/bulletColumns);
