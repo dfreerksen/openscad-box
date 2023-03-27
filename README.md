@@ -51,10 +51,11 @@ openBox(length=65, width=100, height=45, top=false);
 
 ## TODO
 
-1. Minumum lid snap width
-2. Maximum lid snap width
-3. Customizable text
-  a. Lid, top, bottom right
-  b. Base, front, bottom right
-  c. Base, bottom, top left
-  d. Base, bottom, bottom right
+1. Better hinge (using screws or a pin)
+2. Minumum lid snap width
+3. Maximum lid snap width
+4. Customizable text
+  * Lid, top, bottom right
+  * Base, front, bottom right
+  * Base, bottom, top left
+  * Base, bottom, middle left

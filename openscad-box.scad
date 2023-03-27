@@ -170,6 +170,12 @@ module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearan
                 rotate([90, 90, 0])
                 cylinder(d=(shell+(clearance*2)), h=(width+(fillet*2)-(shell*6)), center=true);
             }
+
+            // Bottom lid snap cutout
+            if (top==false) {
+                translate([((length/2)+shell+fillet+(shell*0.5)), 0, (height-(shell*2))])
+                cube([shell, (width+(fillet*2)-rib-(shell*8)), (shell*4)], center=true);
+            }
         }
 
         // Bottom hinge
@@ -206,7 +212,7 @@ module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearan
             topHingeSide(length, width, height, fillet, shell, clearance, rib);
         }
 
-        // Top snap lid
+        // Top lid snap
         if (top==true) {
             difference() {
                 union() {
@@ -257,7 +263,7 @@ module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearan
 }
 
 // Top hinge
-module topHingeSide(length, width, height, fillet, shell, clearance,rib) {
+module topHingeSide(length, width, height, fillet, shell, clearance, rib) {
     difference() {
         union() {
             translate([(-(length/2)-(shell*3)-(shell/2)), ((width/2)-(fillet/2)-(shell*2)+(clearance*0.5)), (height+shell)])
