@@ -4,6 +4,8 @@ Date: 03/24/2023
 */
 
 /* USAGE
+use <openscad-box.scad>
+
 openBox(....);
 
 Parameters
