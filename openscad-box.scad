@@ -173,11 +173,12 @@ module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearan
                 cylinder(d=(shell+(clearance*2)), h=(width+(fillet*2)-(shell*6)), center=true);
             }
 
+            // TODO: Turn this into a variable. Default false to not cut it out
             // Bottom lid snap cutout
-            if (top==false) {
-                translate([((length/2)+shell+fillet+(shell*0.5)), 0, (height-(shell*2))])
-                cube([shell, (width+(fillet*2)-rib-(shell*8)), (shell*4)], center=true);
-            }
+            // if (top==false) {
+            //     translate([((length/2)+shell+fillet+(shell*0.5)), 0, (height-(shell*2))])
+            //     cube([shell, (width+(fillet*2)-rib-(shell*8)), (shell*4)], center=true);
+            // }
         }
 
         // Bottom hinge
