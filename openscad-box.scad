@@ -249,18 +249,22 @@ module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearan
         }
 
         // Inside fill
-        fillHeight = (fill > height) ? height : fill;
-        if (fillHeight > 0) {
-            // Internal box
-            minkowski() {
-                translate([-(length/2), -(width/2), ((shell*2)-(shell/2))])
-                cube([length, width, fillHeight-shell]);
-                cylinder(d=(fillet*2), h=shell, center=true);
-            }
+        let (maxFillHeight = (fill > height) ? height : fill)
+        {
+            if (maxFillHeight > 0) {
+                union() {
+                    // Internal box
+                    minkowski() {
+                        translate([-(length/2), -(width/2), ((shell*2)-(shell/2))])
+                        cube([length, width, maxFillHeight-shell]);
+                        cylinder(d=(fillet*2), h=shell, center=true);
+                    }
 
-            // Internal box filler
-            translate([-(length/2), -(width/2), shell])
-            cube([length, width, fillHeight]);
+                    // Internal box filler
+                    translate([-(length/2), -(width/2), shell])
+                    cube([length, width, maxFillHeight]);
+                }
+            }
         }
     }
 }
