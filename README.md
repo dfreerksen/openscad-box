@@ -39,6 +39,7 @@ Arguments:
 Simple box with default options:
 
 ```openscad
+use <openscad-box.scad>
 openBox(length=65, width=100, height=25, top=true);
 openBox(length=65, width=100, height=45, top=false);
 ```
