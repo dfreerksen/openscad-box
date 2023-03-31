@@ -70,20 +70,20 @@ if (showBoxExample) {
     openBox(length=insideLength, width=insideWidth, height=insideBaseHeight, fill=insideBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=false);
 
     // top
-    color([1, 0.5, 1])
+    color([1, 0.5, 0.5])
     translate([0, (insideWidth+(filletRadius*4)+(shellThickness*4)), 0])
     openBox(length=insideLength, width=insideWidth, height=insideLidHeight, fill=insideLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);
 }
 
 if (showBoxExampleCombinedOpen) {
     // bottom
-    color([1, 0.5, 0.5])
+    color([0.5, 1, 0.5])
     translate([0, (-insideWidth-(filletRadius*4)-(shellThickness*4)), 0])
     openBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=false);
 
     // top
-    color([0.5, 1, 0.5])
-    translate([(-(insideLength/2)-insideLidHeight-shellThickness-(filletRadius*5)+(gapClearance*2)), (-insideWidth-(filletRadius*4)-(shellThickness*4)), (insideBaseHeight+(insideLength/2)+shellThickness+(filletRadius*5)-(gapClearance*2))])
+    color([1, 0.5, 1])
+    translate([(-(insideLength/2)-insideLidHeight-shellThickness-(filletRadius*3)+(gapClearance*5)), (-insideWidth-(filletRadius*4)-(shellThickness*4)), (insideBaseHeight+(insideLength/2)+shellThickness+(filletRadius*3)-(gapClearance*5))])
     rotate([0, 270, 180])
     openBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);
 }
@@ -96,7 +96,7 @@ if (showBoxExampleCombinedClosed) {
 
     // top
     color([1, 1, 0.5])
-    translate([(insideWidth+(filletRadius*4)-(shellThickness*4)), 0, (insideBaseHeight+(insideLength/2)-shellThickness+(filletRadius*5)-(gapClearance*2))])
+    translate([(insideWidth+(filletRadius*4)-(shellThickness*4)), 0, (insideBaseHeight+insideLidHeight+(shellThickness*2))])
     rotate([0, 180, 180])
     openBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);
 }
@@ -106,7 +106,7 @@ module __Customizer_Limit__ () {}
 // Number of fragments to draw an arc
 $fn = 64;
 
-// main module
+// Main module
 module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearance=0.3, top=false) {
     union() {
         difference() {
