@@ -4,7 +4,7 @@ Date: 03/25/2023
 */
 
 // Include box
-use <openscad-box.scad>
+use <openscad-rod-box.scad>
 
 /* [Bullet Properties] */
 
@@ -40,6 +40,9 @@ filletRadius = 4; // [4:20]
 // Width of the ribs
 ribThickness = 10; // [6:15]
 
+// Rod thickness
+rodThickness = 3; // [2:5]
+
 // Gap clearance for joints
 gapClearance = 0.3; // [0.1, 0.2, 0.3, 0.4]
 
@@ -72,7 +75,7 @@ color([0.5, 0.5, 1])
 translate([0, 0, 0])
 difference() {
     // Box
-    openBox(length=internalLength, width=internalWidth, height=internalBaseHeight, fill=internalBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=false);
+    openRodBox(length=internalLength, width=internalWidth, height=internalBaseHeight, fill=internalBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=false);
 
     // Holes
     union() {
@@ -94,4 +97,4 @@ difference() {
 // top
 color([1, 0.5, 1])
 translate([0, (internalWidth+(filletRadius*4)+(shellThickness*4)), 0])
-openBox(length=internalLength, width=internalWidth, height=internalLidHeight, fill=internalLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);
+openRodBox(length=internalLength, width=internalWidth, height=internalLidHeight, fill=internalLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);

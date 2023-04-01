@@ -6,7 +6,7 @@ Date: 03/24/2023
 /* USAGE
 use <openscad-box.scad>
 
-openBox(....);
+openRodBox(....);
 
 Parameters
     length    > Inside length of the box
@@ -48,6 +48,9 @@ filletRadius = 4; // [4:20]
 // Width of the ribs
 ribThickness = 10; // [6:15]
 
+// Rod thickness
+rodThickness = 3; // [2:5]
+
 // Gap clearance for joints
 gapClearance = 0.3; // [0.1, 0.2, 0.3, 0.4]
 
@@ -67,38 +70,38 @@ if (showBoxExample) {
     // bottom
     color([0.5, 0.5, 1])
     translate([0, 0, 0])
-    openBox(length=insideLength, width=insideWidth, height=insideBaseHeight, fill=insideBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=false);
+    openRodBox(length=insideLength, width=insideWidth, height=insideBaseHeight, fill=insideBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, rod=rodThickness, clearance=gapClearance, top=false);
 
     // top
     color([1, 0.5, 0.5])
     translate([0, (insideWidth+(filletRadius*4)+(shellThickness*4)), 0])
-    openBox(length=insideLength, width=insideWidth, height=insideLidHeight, fill=insideLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);
+    openRodBox(length=insideLength, width=insideWidth, height=insideLidHeight, fill=insideLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=true);
 }
 
 if (showBoxExampleCombinedOpen) {
     // bottom
     color([0.5, 1, 0.5])
     translate([0, (-insideWidth-(filletRadius*4)-(shellThickness*4)), 0])
-    openBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=false);
+    openRodBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=false);
 
     // top
     color([1, 0.5, 1])
     translate([(-(insideLength/2)-insideLidHeight-shellThickness-(filletRadius*3)+(gapClearance*5)), (-insideWidth-(filletRadius*4)-(shellThickness*4)), (insideBaseHeight+(insideLength/2)+shellThickness+(filletRadius*3)-(gapClearance*5))])
     rotate([0, 270, 180])
-    openBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);
+    openRodBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=true);
 }
 
 if (showBoxExampleCombinedClosed) {
     // bottom
     color([0.5, 1, 1])
     translate([(insideWidth+(filletRadius*4)-(shellThickness*4)), 0, 0])
-    openBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=false);
+    openRodBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=false);
 
     // top
     color([1, 1, 0.5])
     translate([(insideWidth+(filletRadius*4)-(shellThickness*4)), 0, (insideBaseHeight+insideLidHeight+(shellThickness*2))])
     rotate([0, 180, 180])
-    openBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);
+    openRodBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=true);
 }
 
 module __Customizer_Limit__ () {}
@@ -107,7 +110,7 @@ module __Customizer_Limit__ () {}
 $fn = 64;
 
 // Main module
-module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearance=0.3, top=false) {
+module openRodBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearance=0.3, rod=3, top=false) {
     union() {
         difference() {
             union() {
@@ -157,20 +160,28 @@ module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearan
 
             // Bottom hinge cutout
             if (top==false) {
-                translate([(-(length/2)-(shell*3)), 0, (height+shell)])
+                // Inside cutout
+                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
                 rotate([90, 90, 0])
-                cylinder(d=((shell*2)+(clearance*2)), h=(width+(fillet*2)+rib-(shell*8)+(clearance*2)), center=true);
+                cylinder(d=(shell*2), h=(width+(fillet*2)+rib), center=true);
+
+                // Outside cutout
+                bottomHingeCutout(length, width, height, fillet, shell, clearance, rib, rod);
+                mirror([0, 1, 0])
+                bottomHingeCutout(length, width, height, fillet, shell, clearance, rib, rod);
             }
 
             // Top hinge cutout
             if (top==true) {
+                // Outside cutout
+                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
+                rotate([90, 90, 0])
+                cylinder(d=((shell*2)), h=(width+(fillet*2)+rib), center=true);
+
+                // Inside cutout
                 translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
                 rotate([90, 90, 0])
                 cylinder(d=((shell*2)+(clearance*2)), h=(width+(fillet*2)-rib-(shell*8)+(clearance*2)), center=true);
-
-                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
-                rotate([90, 90, 0])
-                cylinder(d=(shell+(clearance*2)), h=(width+(fillet*2)-(shell*6)), center=true);
             }
 
             // TODO: Turn this into a variable. Default false to not cut it out
@@ -183,36 +194,22 @@ module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearan
 
         // Bottom hinge
         if (top==false) {
-            translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
-            rotate([90, 90, 0])
-            cylinder(d=(shell*2), h=(width+(fillet*2)-rib-(shell*8)), center=true);
-
-            translate([(-(length/2)-(shell*3)-(shell/2)), -(width+(fillet*2)-rib-(shell*8.2))/2, (height+shell)])
-            sphere(d=shell);
-
-            translate([(-(length/2)-(shell*3)-(shell/2)), (width+(fillet*2)-rib-(shell*8.2))/2, (height+shell)])
-            sphere(d=shell);
-
             difference() {
-                union() {
-                    translate([(-(length/2)-(shell*3)-(shell/2)-(shell*0.1)), 0, (height+shell-(shell*2.5))])
-                    cube([(shell*1.8), (width+(fillet*2)-rib-(shell*8)), (shell*5)], center=true);
+                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
+                rotate([90, 90, 0])
+                cylinder(d=(shell*2), h=(width+(fillet*2)-rib-(shell*8)), center=true);
 
-                    translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell-(shell*4))])
-                    cube([(shell*2), (width+(fillet*2)-rib-(shell*8)), (shell*4)], center=true);
-                }
-
-                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height-(shell*4.6))])
-                rotate([0, -45, 0])
-                cube([(shell*2), width, (shell*10)], center=true);
+                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
+                rotate([90, 90, 0])
+                cylinder(d=rod+clearance, h=(width+(fillet*2)-rib-(shell*8)+clearance), center=true);
             }
         }
 
         // Top hinge
         if (top==true) {
-            topHingeSide(length, width, height, fillet, shell, clearance, rib);
+            topHingeSide(length, width, height, fillet, shell, clearance, rib, rod);
             mirror([0, 1, 0])
-            topHingeSide(length, width, height, fillet, shell, clearance, rib);
+            topHingeSide(length, width, height, fillet, shell, clearance, rib, rod);
         }
 
         // Top lid snap
@@ -269,28 +266,25 @@ module openBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clearan
     }
 }
 
+// Bottom hinge cutout
+module bottomHingeCutout(length, width, height, fillet, shell, clearance, rib, rod) {
+    translate([(-(length/2)-(shell*3)-(shell/2)), -(width/2), (height+shell)])
+    rotate([90, 90, 0])
+    // cylinder(d=((shell*2)+(clearance*2)), h=((rib*2)+(fillet*2)-(shell/2)-clearance), center=true);
+
+    cylinder(d=((shell*2)+(clearance*2)), h=((width/2+(fillet*2)-rib-(shell*8))+(clearance*7)), center=true);
+}
+
 // Top hinge
-module topHingeSide(length, width, height, fillet, shell, clearance, rib) {
+module topHingeSide(length, width, height, fillet, shell, clearance, rib, rod) {
     difference() {
-        union() {
-            translate([(-(length/2)-(shell*3)-(shell/2)), ((width/2)-(fillet/2)-(shell*2)+(clearance*0.5)), (height+shell)])
-            rotate([90, 90, 0])
-            cylinder(d=2*shell, h=rib-clearance, center=true);
+        translate([(-(length/2)-(shell*3)-(shell/2)), ((width/2)-(fillet/2)-(shell*2)+(clearance*0.5)), (height+shell)])
+        rotate([90, 90, 0])
+        cylinder(d=(shell*2), h=(rib-clearance), center=true);
 
-            translate([(-(length/2)-(shell*3)-(shell/2)), ((width/2)-(fillet/2)-(shell*2)+(clearance*0.5)), (height-shell)])
-            cube([(shell*2), rib-clearance, (shell*4)], center=true);
-        }
-
-        translate([(-(length/2)-(shell*3)-(shell/2)), (width-fillet+(shell*4)-rib-(shell*8))/2, (height+shell)])
-        sphere(d=shell);
-
-        translate([(-(length/2)-(shell*3)-(shell/2)), (width-fillet+(shell*4)-rib-(shell*8.3)+clearance)/2, (height+shell)])
-        rotate([0,-90,0])
-        cylinder(h=(shell+0.1), d=shell);
-
-        translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height-(shell*3))])
-        rotate([0,-45,0])
-        cube([2*shell, width, (shell*10)], center=true);
+        translate([(-(length/2)-(shell*3)-(shell/2)), ((width/2)-(fillet/2)-(shell*2)+(clearance*0.5)), (height+shell)])
+        rotate([90, 90, 0])
+        cylinder(d=rod, h=(rib+clearance), center=true);
     }
 }
 
