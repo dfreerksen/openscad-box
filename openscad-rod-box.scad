@@ -49,7 +49,7 @@ filletRadius = 4; // [4:20]
 ribThickness = 10; // [6:15]
 
 // Rod thickness
-rodThickness = 3; // [2:5]
+rodThickness = 3; // [2:4]
 
 // Gap clearance for joints
 gapClearance = 0.3; // [0.1, 0.2, 0.3, 0.4]
@@ -81,12 +81,12 @@ if (showBoxExample) {
 if (showBoxExampleCombinedOpen) {
     // bottom
     color([0.5, 1, 0.5])
-    translate([0, (-insideWidth-(filletRadius*4)-(shellThickness*4)), 0])
+    translate([(-insideLength-(shellThickness*10)), 0, 0])
     openRodBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=false);
 
     // top
     color([1, 0.5, 1])
-    translate([(-(insideLength/2)-insideLidHeight-shellThickness-(filletRadius*3)+(gapClearance*5)), (-insideWidth-(filletRadius*4)-(shellThickness*4)), (insideBaseHeight+(insideLength/2)+shellThickness+(filletRadius*3)-(gapClearance*5))])
+    translate([(-insideLength-(shellThickness*10))-(insideLength)-((rodThickness*3)/2)-(gapClearance*3), 0, ((insideBaseHeight*2)-((rodThickness*3)/2)+(shellThickness*2)-(gapClearance*3))])
     rotate([0, 270, 180])
     openRodBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=true);
 }
@@ -94,12 +94,12 @@ if (showBoxExampleCombinedOpen) {
 if (showBoxExampleCombinedClosed) {
     // bottom
     color([0.5, 1, 1])
-    translate([(insideWidth+(filletRadius*4)-(shellThickness*4)), 0, 0])
+    translate([(insideLength+(shellThickness*10)), 0, 0])
     openRodBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=false);
 
     // top
     color([1, 1, 0.5])
-    translate([(insideWidth+(filletRadius*4)-(shellThickness*4)), 0, (insideBaseHeight+insideLidHeight+(shellThickness*2))])
+    translate([(insideLength+(shellThickness*10)), 0, ((insideBaseHeight*2)-(shellThickness*5)+(gapClearance*4)-gapClearance)])
     rotate([0, 180, 180])
     openRodBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=true);
 }
@@ -161,9 +161,9 @@ module openRodBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clea
             // Bottom hinge cutout
             if (top==false) {
                 // Inside cutout
-                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
+                translate([(-(length/2)-(shell*3)-(shell/3)), 0, (height+shell)])
                 rotate([90, 90, 0])
-                cylinder(d=(shell*2), h=(width+(fillet*2)+rib), center=true);
+                cylinder(d=(rod+clearance), h=(width+(fillet*2)+rib), center=true);
 
                 // Outside cutout
                 bottomHingeCutout(length, width, height, fillet, shell, clearance, rib, rod);
@@ -174,14 +174,14 @@ module openRodBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clea
             // Top hinge cutout
             if (top==true) {
                 // Outside cutout
-                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
+                translate([(-(length/2)-(shell*3)-(shell/3)), 0, (height+shell)])
                 rotate([90, 90, 0])
-                cylinder(d=((shell*2)), h=(width+(fillet*2)+rib), center=true);
+                cylinder(d=(rod), h=(width+(fillet*2)+rib), center=true);
 
                 // Inside cutout
-                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
+                translate([(-(length/2)-(shell*3)-(shell/3)), 0, (height+shell)])
                 rotate([90, 90, 0])
-                cylinder(d=((shell*2)+(clearance*2)), h=(width+(fillet*2)-rib-(shell*8)+(clearance*2)), center=true);
+                cylinder(d=((rod*3)+(clearance*2)), h=(width+(fillet*2)-rib-(shell*8)+(clearance*2)), center=true);
             }
 
             // TODO: Turn this into a variable. Default false to not cut it out
@@ -195,11 +195,11 @@ module openRodBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clea
         // Bottom hinge
         if (top==false) {
             difference() {
-                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
+                translate([(-(length/2)-(shell*3)-(shell/3)), 0, (height+shell)])
                 rotate([90, 90, 0])
-                cylinder(d=(shell*2), h=(width+(fillet*2)-rib-(shell*8)), center=true);
+                cylinder(d=(rod*3), h=(width+(fillet*2)-rib-(shell*8)), center=true);
 
-                translate([(-(length/2)-(shell*3)-(shell/2)), 0, (height+shell)])
+                translate([(-(length/2)-(shell*3)-(shell/3)), 0, (height+shell)])
                 rotate([90, 90, 0])
                 cylinder(d=rod+clearance, h=(width+(fillet*2)-rib-(shell*8)+clearance), center=true);
             }
@@ -268,21 +268,19 @@ module openRodBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clea
 
 // Bottom hinge cutout
 module bottomHingeCutout(length, width, height, fillet, shell, clearance, rib, rod) {
-    translate([(-(length/2)-(shell*3)-(shell/2)), -(width/2), (height+shell)])
+    translate([(-(length/2)-(shell*3)-(shell/3)), ((width/2)), (height+shell)])
     rotate([90, 90, 0])
-    // cylinder(d=((shell*2)+(clearance*2)), h=((rib*2)+(fillet*2)-(shell/2)-clearance), center=true);
-
-    cylinder(d=((shell*2)+(clearance*2)), h=((width/2+(fillet*2)-rib-(shell*8))+(clearance*7)), center=true);
+    cylinder(d=((rod*3)+(clearance*2)), h=((fillet)+(shell*3)), center=false);
 }
 
 // Top hinge
 module topHingeSide(length, width, height, fillet, shell, clearance, rib, rod) {
     difference() {
-        translate([(-(length/2)-(shell*3)-(shell/2)), ((width/2)-(fillet/2)-(shell*2)+(clearance*0.5)), (height+shell)])
+        translate([(-(length/2)-(shell*3)-(shell/3)), ((width/2)-(fillet/2)-(shell*2)+(clearance*0.5)), (height+shell)])
         rotate([90, 90, 0])
-        cylinder(d=(shell*2), h=(rib-clearance), center=true);
+        cylinder(d=(rod*3), h=(rib-clearance), center=true);
 
-        translate([(-(length/2)-(shell*3)-(shell/2)), ((width/2)-(fillet/2)-(shell*2)+(clearance*0.5)), (height+shell)])
+        translate([(-(length/2)-(shell*3)-(shell/3)), ((width/2)-(fillet/2)-(shell*2)+(clearance*0.5)), (height+shell)])
         rotate([90, 90, 0])
         cylinder(d=rod, h=(rib+clearance), center=true);
     }
