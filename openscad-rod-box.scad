@@ -268,9 +268,9 @@ module openRodBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, clea
 
 // Bottom hinge cutout
 module bottomHingeCutout(length, width, height, fillet, shell, clearance, rib, rod) {
-    translate([(-(length/2)-(shell*3)-(shell/3)), ((width/2)), (height+shell)])
+    translate([(-(length/2)-(shell*3)-(shell/3)), ((width/2)-shell+(clearance*0.5)), (height+shell)])
     rotate([90, 90, 0])
-    cylinder(d=((rod*3)+(clearance*2)), h=((fillet)+(shell*3)), center=false);
+    cylinder(d=((rod*3)+(clearance*2)), h=((fillet)+(shell*2)+(clearance*0.5)), center=false);
 }
 
 // Top hinge
