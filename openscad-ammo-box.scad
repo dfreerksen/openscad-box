@@ -24,7 +24,7 @@ bulletHeight = 29.69;
 bulletCaseHeight = 19.15;
 
 // Additional clearance for bullet diameter. The smaller the number, the tighter the fit
-bulletClearance = 0.04; // [0.02, 0.03, 0.04, 0.05, 0.06]
+bulletClearance = 0.05; // [0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08]
 
 // Gap between holes
 bulletGap = 1.6;
