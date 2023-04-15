@@ -12,6 +12,7 @@ Parameters
     length    > Inside length of the box
     width     > Inside width of the box
     height    > Inside height,
+    fill      > Inside fill height,
     shell     > Shell thickness
     fillet    > Radius of the fillets (corners)
     rib       > Width of the ribs
@@ -75,33 +76,33 @@ if (showBoxExample) {
     // top
     color([1, 0.5, 0.5])
     translate([0, (insideWidth+(filletRadius*4)+(shellThickness*4)), 0])
-    openRodBox(length=insideLength, width=insideWidth, height=insideLidHeight, fill=insideLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=true);
+    openRodBox(length=insideLength, width=insideWidth, height=insideLidHeight, fill=insideLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, rod=rodThickness, clearance=gapClearance, top=true);
 }
 
 if (showBoxExampleCombinedOpen) {
     // bottom
     color([0.5, 1, 0.5])
     translate([(-insideLength-(shellThickness*10)), 0, 0])
-    openRodBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=false);
+    openRodBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, rod=rodThickness, clearance=gapClearance, top=false);
 
     // top
     color([1, 0.5, 1])
     translate([(-insideLength-(shellThickness*10))-(insideLength)-((rodThickness*3)/2)-(gapClearance*3), 0, ((insideBaseHeight*2)-((rodThickness*3)/2)+(shellThickness*2)-(gapClearance*3))])
     rotate([0, 270, 180])
-    openRodBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=true);
+    openRodBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, rod=rodThickness, clearance=gapClearance, top=true);
 }
 
 if (showBoxExampleCombinedClosed) {
     // bottom
     color([0.5, 1, 1])
     translate([(insideLength+(shellThickness*10)), 0, 0])
-    openRodBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=false);
+    openRodBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, rod=rodThickness, clearance=gapClearance, top=false);
 
     // top
     color([1, 1, 0.5])
     translate([(insideLength+(shellThickness*10)), 0, ((insideBaseHeight*2)-(shellThickness*5)+(gapClearance*4)-gapClearance)])
     rotate([0, 180, 180])
-    openRodBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, rod=rodThickness, top=true);
+    openRodBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, rod=rodThickness, clearance=gapClearance, rod=rodThickness, top=true);
 }
 
 module __Customizer_Limit__ () {}
