@@ -4,7 +4,7 @@ Date: 03/24/2023
 */
 
 /* USAGE
-use <openscad-box.scad>
+use <openscad-rod-box.scad>
 
 openRodBox(....);
 
