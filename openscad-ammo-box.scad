@@ -1,10 +1,10 @@
 /*
 Author: David Freerksen, dfreerksen@gmail.com
-Date: 03/25/2023
+Date: 04/15/2023
 */
 
 // Include box
-use <openscad-rod-box.scad>
+use <openscad-screw-box.scad>
 
 /* [Bullet Properties] */
 
@@ -40,8 +40,14 @@ filletRadius = 4; // [4:20]
 // Width of the ribs
 ribThickness = 10; // [6:15]
 
-// Rod thickness
-rodThickness = 3; // [2:5]
+// Screw size
+screwSize = 3; // [2:M2, 3:M3, 4:M4, 5:M5]
+
+// Hinge diameter
+hingeDiameter = 5.68; // [3.98:M2, 5.68:M3, 7.22:M4, 8.72:M5]
+
+// Lid snap cutout
+snapCutout = false;
 
 // Gap clearance for joints
 gapClearance = 0.3; // [0.1, 0.2, 0.3, 0.4]
@@ -75,7 +81,7 @@ color([0.5, 0.5, 1])
 translate([0, 0, 0])
 difference() {
     // Box
-    openRodBox(length=internalLength, width=internalWidth, height=internalBaseHeight, fill=internalBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=false);
+    openScrewBox(length=internalLength, width=internalWidth, height=internalBaseHeight, fill=internalBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, clearance=gapClearance, top=false);
 
     // Holes
     union() {
@@ -97,4 +103,4 @@ difference() {
 // top
 color([1, 0.5, 1])
 translate([0, (internalWidth+(filletRadius*4)+(shellThickness*4)), 0])
-openRodBox(length=internalLength, width=internalWidth, height=internalLidHeight, fill=internalLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, clearance=gapClearance, top=true);
+openScrewBox(length=internalLength, width=internalWidth, height=internalLidHeight, fill=internalLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, clearance=gapClearance, top=true);
