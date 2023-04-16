@@ -298,7 +298,7 @@ module topHingeCutout(length, width, height, fillet, shell, clearance, rib, scre
     // Outside cutout
     translate([(-(length/2)-(shell*3)-(shell/3)), ((width/2)-shell+rib+(clearance*0.5)), (height+shell)])
     rotate([90, 90, 0])
-    cylinder(d=(hinge+(clearance*2)), h=((fillet)+(shell*2)+(clearance*0.5)), center=false);
+    cylinder(d=(hinge-(clearance*0.5)), h=((fillet)+(shell*2)+(clearance*0.5)), center=false);
 }
 
 // Top hinge
