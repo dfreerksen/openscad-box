@@ -47,7 +47,7 @@ screwSize = 3; // [2:M2, 3:M3, 4:M4, 5:M5]
 hingeDiameter = 5.68; // [3.98:M2, 5.68:M3, 7.22:M4, 8.72:M5]
 
 // Lid snap cutout
-snapCutout = false;
+snapCutout = true;
 
 // Gap clearance for joints
 gapClearance = 0.3; // [0.1, 0.2, 0.3, 0.4]
@@ -81,7 +81,7 @@ color([0.5, 0.5, 1])
 translate([0, 0, 0])
 difference() {
     // Box
-    openScrewBox(length=internalLength, width=internalWidth, height=internalBaseHeight, fill=internalBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, clearance=gapClearance, top=false);
+    openScrewBox(length=internalLength, width=internalWidth, height=internalBaseHeight, fill=internalBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, top=false);
 
     // Holes
     union() {
@@ -103,4 +103,4 @@ difference() {
 // top
 color([1, 0.5, 1])
 translate([0, (internalWidth+(filletRadius*4)+(shellThickness*4)), 0])
-openScrewBox(length=internalLength, width=internalWidth, height=internalLidHeight, fill=internalLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, clearance=gapClearance, top=true);
+openScrewBox(length=internalLength, width=internalWidth, height=internalLidHeight, fill=internalLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, top=true);
