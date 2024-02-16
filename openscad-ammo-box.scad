@@ -8,11 +8,11 @@ use <openscad-screw-box.scad>
 
 /* [Bullet Properties] */
 
-// Number of holes
-bulletCount = 20; // [5:100]
+// Number of holes in each column
+bulletColumns = 5; // [2:10]
 
 // Number of holes in each column
-bulletColumns = 4; // [2:12]
+bulletRows = 4; // [2:10]
 
 // Diameter of bullet (base diameter, not rim diameter). Get this from Wikipedia
 bulletDiameter = 9.93;
@@ -24,7 +24,7 @@ bulletHeight = 29.69;
 bulletCaseHeight = 19.15;
 
 // Additional clearance for bullet diameter. The smaller the number, the tighter the fit
-bulletClearance = 0.06; // [0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08]
+bulletClearance = 0.3; // [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
 
 // Gap between holes
 bulletGap = 1.6;
@@ -46,8 +46,11 @@ screwSize = 3; // [2:M2, 3:M3, 4:M4, 5:M5]
 // Hinge diameter
 hingeDiameter = 5.68; // [3.98:M2, 5.68:M3, 7.22:M4, 8.72:M5]
 
+// Lid snap max width
+snapMaxWidth = 35; // [30:1000]
+
 // Lid snap cutout
-snapCutout = true;
+snapCutout = false;
 
 // Gap clearance for joints
 gapClearance = 0.3; // [0.1, 0.2, 0.3, 0.4]
@@ -58,10 +61,12 @@ module __Customizer_Limit__ () {}
 $fn = 64;
 
 // Bullet calculations
-columnCount = floor(bulletCount/bulletColumns);
-rowCount = floor(bulletCount/columnCount);
-internalLength = (rowCount*bulletDiameter)+((rowCount-1)*bulletGap);
-internalWidth = (columnCount*bulletDiameter)+((columnCount-1)*bulletGap);
+columnCount = bulletColumns;
+rowCount = bulletRows;
+bulletCount = bulletColumns * bulletRows;
+
+internalLength = (rowCount*bulletDiameter)+(rowCount*bulletClearance)+((rowCount-1)*bulletGap);
+internalWidth = (columnCount*bulletDiameter)+(columnCount*bulletClearance)+((columnCount-1)*bulletGap);
 internalLidHeight = (bulletHeight-bulletCaseHeight);
 internalBaseHeightCalculated = (bulletHeight+gapClearance-internalLidHeight);
 internalBaseHeight = (internalLidHeight > internalBaseHeightCalculated) ? internalLidHeight : internalBaseHeightCalculated;
@@ -81,7 +86,7 @@ color([0.5, 0.5, 1])
 translate([0, 0, 0])
 difference() {
     // Box
-    openScrewBox(length=internalLength, width=internalWidth, height=internalBaseHeight, fill=internalBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, top=false);
+    openScrewBox(length=internalLength, width=internalWidth, height=internalBaseHeight, fill=internalBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, snapMax=snapMaxWidth, top=false);
 
     // Holes
     union() {
@@ -103,4 +108,4 @@ difference() {
 // top
 color([1, 0.5, 1])
 translate([0, (internalWidth+(filletRadius*4)+(shellThickness*4)), 0])
-openScrewBox(length=internalLength, width=internalWidth, height=internalLidHeight, fill=internalLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, top=true);
+openScrewBox(length=internalLength, width=internalWidth, height=internalLidHeight, fill=internalLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, snapMax=snapMaxWidth, top=true);
