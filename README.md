@@ -4,14 +4,14 @@ Reproduction of [Parametrizable Rugged Box](https://www.printables.com/model/168
 
 ## Box Types
 
-* [Basic Box](#basic-box)
-* [Rod Box](#rod-box)
-* [Screw Box](#screw-box)
-* [Ammo Box](#ammo-box)
+* [Basic Box](#basic-box) (no longer maintained)
+* [Rod Box](#rod-box) (no longer maintained)
+* [Screw Box](#screw-box) (currently maintained)
+* [Ammo Box](#ammo-box) (currently maintained)
 
 ## Basic Box
 
-This box does not require anything additional to put it together.
+This box does not require anything additional to put it together. No longer maintained.
 
 ### Usage
 
@@ -61,7 +61,7 @@ openBox(length=65, width=100, height=45, top=false);
 
 ## Rod Box
 
-This box requires a 3mm (1/8") diameter rod for the hinge.
+This box requires a 3mm (1/8") diameter rod for the hinge. No longer maintained.
 
 ### Usage
 
@@ -138,6 +138,7 @@ Arguments:
 * __hinge__ Hinge diameter (default: `5.68`)
 * __snap__ Snap cutout (default: `false`)
 * __clearance__ Gap clearance for joints. Between 0.1-0.4 (default: `0.3`)
+* __snapMax__ Max width of lid snap (default: `1000`)
 * __top__ Top or bottom box (default: `false`)
 
 ### Example
@@ -157,9 +158,3 @@ TODO
 ## TODO
 
 1. Minumum lid snap width
-2. Maximum lid snap width
-3. Customizable text
-  * Lid, top, bottom right
-  * Base, front, bottom right
-  * Base, bottom, top left
-  * Base, bottom, middle left

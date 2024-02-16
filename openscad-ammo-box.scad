@@ -47,7 +47,7 @@ screwSize = 3; // [2:M2, 3:M3, 4:M4, 5:M5]
 hingeDiameter = 5.68; // [3.98:M2, 5.68:M3, 7.22:M4, 8.72:M5]
 
 // Lid snap max width
-snapMaxWidth = 35; // [30:1000]
+snapMaxWidth = 1000; // [30:1000]
 
 // Lid snap cutout
 snapCutout = false;
