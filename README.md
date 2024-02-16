@@ -155,6 +155,98 @@ openScrewBox(length=65, width=100, height=45, top=false);
 
 TODO
 
+### Ideal Ammox Box Sizes
+
+This is mostly a personal preference and settings I have found ideal. You are free to disagree. All dimensions are in millimeters. Dimensions can be found on Wikipedia.
+
+# .22 LR
+
+```
+bulletDiameter = 5.7;
+bulletHeight = 25.4;
+bulletCaseHeight = 15.2;
+```
+
+# 9mm
+
+```
+bulletDiameter = 9.93;
+bulletHeight = 29.69;
+bulletCaseHeight = 19.15;
+```
+
+# .380 ACP
+
+```
+bulletDiameter = 9.5;
+bulletHeight = 25.0;
+bulletCaseHeight = 14.6;
+```
+
+# .38 Special
+
+```
+bulletDiameter = 9.1;
+bulletHeight = 39.4;
+bulletCaseHeight = 28.3;
+```
+
+# .40 S&W
+
+```
+bulletDiameter = 10.8;
+bulletHeight = 28.8;
+bulletCaseHeight = 18.6;
+```
+
+# .45 ACP x 20
+
+```
+bulletDiameter = 12.1;
+bulletHeight = 32.4;
+bulletCaseHeight = 21.8;
+```
+
+# .223 Winchester / 5.56 NATO
+
+```
+bulletDiameter = 9.6;
+bulletHeight = 57.4;
+bulletCaseHeight = 46;
+```
+
+# 7.62x39
+
+```
+bulletDiameter = 11.35;
+bulletHeight = 56.00;
+bulletCaseHeight = 44.70;
+```
+
+# 6.5 Creedmoor
+
+```
+bulletDiameter = 11.95;
+bulletHeight = 71.8;
+bulletCaseHeight = 58.8;
+```
+
+# .308 Winchester / 7.62 NATO
+
+```
+bulletDiameter = 7.82;
+bulletHeight = 71.1;
+bulletCaseHeight = 59.2;
+```
+
+# .30-30 Winchester
+
+```
+bulletDiameter = 10.7;
+bulletHeight = 64.8;
+bulletCaseHeight = 52.8;
+```
+
 ## TODO
 
 1. Minumum lid snap width
