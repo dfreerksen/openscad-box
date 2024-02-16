@@ -20,6 +20,7 @@ Parameters
     hinge     > Hinge diameter
     snap      > Snap cutout
     clearance > Gap clearance for joints
+    snapMax   > Max width of the lid snap
     top       > Is this the top of the box
 */
 
@@ -61,6 +62,9 @@ hingeDiameter = 5.68; // [3.98:M2, 5.68:M3, 7.22:M4, 8.72:M5]
 // Lid snap cutout
 snapCutout = false;
 
+// Snap max width
+snapMaxWidth = 35; // [30:1000]
+
 // Gap clearance for joints
 gapClearance = 0.3; // [0.1, 0.2, 0.3, 0.4]
 
@@ -80,38 +84,38 @@ if (showBoxExample) {
     // bottom
     color([0.5, 0.5, 1])
     translate([0, 0, 0])
-    openScrewBox(length=insideLength, width=insideWidth, height=insideBaseHeight, fill=insideBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, top=false);
+    openScrewBox(length=insideLength, width=insideWidth, height=insideBaseHeight, fill=insideBaseFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, snapMax=snapMaxWidth, top=false);
 
     // top
     color([1, 0.5, 0.5])
     translate([0, (insideWidth+(filletRadius*4)+(shellThickness*4)), 0])
-    openScrewBox(length=insideLength, width=insideWidth, height=insideLidHeight, fill=insideLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, top=true);
+    openScrewBox(length=insideLength, width=insideWidth, height=insideLidHeight, fill=insideLidFillHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, snapMax=snapMaxWidth, top=true);
 }
 
 if (showBoxExampleCombinedOpen) {
     // bottom
     color([0.5, 1, 0.5])
     translate([(-insideLength-(shellThickness*10)), 0, 0])
-    openScrewBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, top=false);
+    openScrewBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, snapMax=snapMaxWidth, top=false);
 
     // top
     color([1, 0.5, 1])
     translate([(-insideLength-(shellThickness*10))-(insideLength)-((screwSize*3)/2)-(gapClearance*3), 0, ((insideBaseHeight*2)-((screwSize*3)/2)+(shellThickness*2)-(gapClearance*3))])
     rotate([0, 270, 180])
-    openScrewBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, top=true);
+    openScrewBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, snapMax=snapMaxWidth, top=true);
 }
 
 if (showBoxExampleCombinedClosed) {
     // bottom
     color([0.5, 1, 1])
     translate([(insideLength+(shellThickness*10)), 0, 0])
-    openScrewBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, top=false);
+    openScrewBox(length=insideLength, width=insideWidth, height=insideBaseHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, snapMax=snapMaxWidth, top=false);
 
     // top
     color([1, 1, 0.5])
     translate([(insideLength+(shellThickness*10)), 0, ((insideBaseHeight*2)-(shellThickness*5)+(gapClearance*4)-gapClearance)])
     rotate([0, 180, 180])
-    openScrewBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, top=true);
+    openScrewBox(length=insideLength, width=insideWidth, height=insideLidHeight, shell=shellThickness, fillet=filletRadius, rib=ribThickness, screw=screwSize, hinge=hingeDiameter, snap=snapCutout, clearance=gapClearance, snapMax=snapMaxWidth, top=true);
 }
 
 module __Customizer_Limit__ () {}
@@ -120,7 +124,7 @@ module __Customizer_Limit__ () {}
 $fn = 64;
 
 // Main module
-module openScrewBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, screw=3, hinge=5.68, snap=false, clearance=0.3, top=false) {
+module openScrewBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, screw=3, hinge=5.68, snap=false, clearance=0.3, snapMax=30, top=false) {
     union() {
         difference() {
             union() {
@@ -223,34 +227,37 @@ module openScrewBox(length, width, height, fill=0, shell=3, fillet=4, rib=10, sc
 
         // Top lid snap
         if (top==true) {
-            difference() {
-                union() {
-                    translate([((length/2)+shell+fillet+(shell*1.5)), 0, (height+shell)])
-                    cube([shell, (width+(fillet*2)-rib-(shell*8)-clearance), (shell*6)], center=true);
+            let (snapWidth = ((width+(fillet*2)-rib-(shell*8)) > snapMax) ? snapMax : (width+(fillet*2)-rib-(shell*8)))
+            {
+                difference() {
+                    union() {
+                        translate([((length/2)+shell+fillet+(shell*1.5)), 0, (height+shell)])
+                        cube([shell, snapWidth, (shell*6)], center=true);
 
-                    translate([((length/2)+shell+fillet+(shell*0.5)), 0, (height-shell)])
-                    cube([shell, (width+(fillet*2)-rib-(shell*8)), (shell*4)], center=true);
+                        translate([((length/2)+fillet+shell), 0, (height-shell)])
+                        cube([(shell*2), snapWidth, (shell*4)], center=true);
 
-                    translate([((length/2)+shell+fillet+(shell*1.1)), 0, (height+shell+(shell*1.5)+(clearance*2))])
-                    rotate([90, 90, 0])
-                    cylinder(d=shell, h=(width+(fillet*2)-rib-(shell*8)), center=true);
+                        translate([((length/2)+shell+fillet+(shell*1.1)), 0, (height+shell+(shell*1.5)+(clearance*2))])
+                        rotate([90, 90, 0])
+                        cylinder(d=shell, h=snapWidth, center=true);
+                    }
+
+                    translate([((length/2)+(shell*2)), 0, (height-(shell*4))])
+                    rotate([0, 45, 0])
+                    cube([(shell*2), (snapWidth+(clearance)), (shell*10)], center=true);
+
+                    translate([((length/2)+(shell*2)), ((snapWidth-(fillet*4)+rib)/2), (height+(shell*5))])
+                    rotate([45, 0, 0])
+                    cube([(shell*10), (shell*3), (shell*10)], center=true);
+
+                    translate([((length/2)+(shell*2)), -((snapWidth-(fillet*4)+rib)/2), (height+(shell*5))])
+                    rotate([-45, 0, 0])
+                    cube([(shell*10), (shell*3), (shell*10)], center=true);
+
+                    translate([((length/2)+(shell*2)+shell+(shell/2)), 0, (height+(shell*5.8))])
+                    rotate([0, 45, 0])
+                    cube([(shell*3), snapWidth, (shell*10)], center=true);
                 }
-
-                translate([((length/2)+(shell*2)), 0, (height-(shell*4))])
-                rotate([0, 45, 0])
-                cube([(shell*2), width, (shell*10)], center=true);
-
-                translate([((length/2)+(shell*2)), ((width-(fillet*2)-rib-(shell*8)+rib)/2), (height+(shell*5))])
-                rotate([45, 0, 0])
-                cube([(shell*10), (shell*3), (shell*10)], center=true);
-
-                translate([((length/2)+(shell*2)), -((width-(fillet*2)-rib-(shell*8)+rib)/2), (height+(shell*5))])
-                rotate([-45, 0, 0])
-                cube([(shell*10), (shell*3), (shell*10)], center=true);
-
-                translate([((length/2)+(shell*2)+shell+(shell/2)), 0, (height+(shell*5.8))])
-                rotate([0, 45, 0])
-                cube([(shell*3), width, (shell*10)], center=true);
             }
         }
 
