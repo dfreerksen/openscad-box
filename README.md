@@ -153,7 +153,9 @@ openScrewBox(length=65, width=100, height=45, top=false);
 
 ## Ammo Box
 
-TODO
+An extension of the screw box that adds holes for bullets. This box requires 2 M3 x 20 screws for the hinges.
+
+![box_example_screw_ammo](./examples/ammo.png)
 
 ### Ideal Ammox Box Sizes
 
